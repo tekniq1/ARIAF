@@ -17,7 +17,7 @@
   body {
     background-color: var(--cream);
     color: var(--dark-text);
-    font-family: 'Alexandria', 'Noto Kufi Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Tajawal', sans-serif;
     position: relative;
     overflow-x: hidden;
     direction: rtl; /* Enforce RTL globally */
@@ -25,45 +25,45 @@
 
   /* Typography Hierarchy */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold text-darkText leading-tight;
+    @apply font-medium text-darkText leading-tight;
   }
   h1 { @apply text-3xl md:text-5xl lg:text-6xl tracking-tight mb-4; }
   h2 { @apply text-2xl md:text-3xl lg:text-4xl tracking-tight mb-3; }
   h3 { @apply text-xl md:text-2xl mb-2; }
-  p { @apply leading-relaxed text-taupe; }
+  p { @apply leading-[1.8] text-taupe font-light; }
 
-  /* Form Inputs (Unified) */
+  /* Form Inputs (Unified - Luxury Bottom Border) */
   input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="tel"], textarea, select {
-    @apply bg-cream border border-graySoft rounded-md px-4 py-3 text-darkText transition-colors duration-300 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 placeholder-taupe/60 w-full;
+    @apply bg-cream-pure border-b border-gold/20 rounded-none px-4 py-3 text-darkText transition-colors duration-300 focus:outline-none focus:border-gold placeholder-taupe/50 w-full;
   }
 }
 
 @layer components {
-  /* Button System */
+  /* Button System - Sharper corners, no borders where not needed */
   .btn-primary {
-    @apply bg-burgundy text-cream hover:bg-burgundy-light transition-all duration-300 rounded-md px-6 py-3 font-medium text-center inline-flex items-center justify-center gap-2;
+    @apply bg-burgundy text-cream hover:bg-burgundy-light transition-all duration-300 rounded-[2px] px-6 py-3 font-medium text-center inline-flex items-center justify-center gap-2;
   }
   .btn-secondary {
-    @apply bg-transparent border border-burgundy text-burgundy hover:bg-burgundy/5 transition-all duration-300 rounded-md px-6 py-3 font-medium text-center inline-flex items-center justify-center gap-2;
+    @apply bg-transparent border-b border-burgundy/30 text-burgundy hover:bg-burgundy/5 transition-all duration-300 rounded-none px-6 py-3 font-medium text-center inline-flex items-center justify-center gap-2;
   }
   .btn-ghost {
-    @apply bg-transparent text-burgundy hover:bg-burgundy/10 transition-all duration-300 rounded-md px-6 py-3 font-medium text-center inline-flex items-center justify-center gap-2;
+    @apply bg-transparent text-burgundy hover:bg-burgundy/10 transition-all duration-300 rounded-[2px] px-6 py-3 font-medium text-center inline-flex items-center justify-center gap-2;
   }
   .btn-gold {
-    @apply bg-gold text-cream hover:bg-gold-dark transition-all duration-300 rounded-md px-6 py-3 font-medium text-center inline-flex items-center justify-center gap-2;
+    @apply bg-gold text-cream hover:bg-gold-dark transition-all duration-300 rounded-[2px] px-6 py-3 font-medium text-center inline-flex items-center justify-center gap-2;
   }
 
-  /* Base Card Style */
+  /* Base Card Style - Borderless, whitespace dependent */
   .card-base {
-    @apply bg-cream-pure border border-graySoft rounded-md shadow-card transition-all duration-300 hover:shadow-luxury p-6;
+    @apply bg-cream-pure rounded-[4px] transition-all duration-300 hover:shadow-card p-6;
   }
 
-  /* Badges */
+  /* Badges - Borderless */
   .badge-gold {
-    @apply bg-gold/10 text-gold-dark px-3 py-1 rounded-sm text-xs font-medium border border-gold/20;
+    @apply bg-gold/10 text-gold-dark px-3 py-1 rounded-[2px] text-xs font-medium;
   }
   .badge-dark {
-    @apply bg-burgundy/10 text-burgundy px-3 py-1 rounded-sm text-xs font-medium border border-burgundy/10;
+    @apply bg-burgundy/10 text-burgundy px-3 py-1 rounded-[2px] text-xs font-medium;
   }
 }
 

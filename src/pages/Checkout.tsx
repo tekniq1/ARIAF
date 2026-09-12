@@ -57,6 +57,7 @@ export default function Checkout() {
   const [deliveryMethod, setDeliveryMethod] = useState<"home" | "pickup">("home");
   const [paymentMethod, setPaymentMethod] = useState<"whatsapp" | "bank">("whatsapp");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [step, setStep] = useState(1);
 
   // Totals calculation
   const defaultShipping = settings.shipping.default || 2;
@@ -299,19 +300,19 @@ _شكراً لاختياركم أرياف - صلالة_ ✨`;
       {/* Visual Progress Header */}
       <div className="bg-[#2A1A17] pt-12 sm:pt-20 pb-16 px-4">
         <div className="max-w-3xl mx-auto">
-          <div className="flex items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm font-bold text-cream/50 relative">
-            <div className="flex items-center gap-2 text-gold">
-              <span className="w-6 h-6 rounded-full bg-gold text-[#2A1A17] flex items-center justify-center text-xs">1</span>
-              <span>البيانات</span>
+          <div className="flex items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm font-medium text-cream/50 relative">
+            <div className={`flex items-center gap-2 ${step >= 1 ? 'text-gold' : ''} transition-colors duration-300`}>
+              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${step >= 1 ? 'bg-gold text-[#2A1A17]' : 'border border-cream/20'}`}>1</span>
+              <span>التوصيل</span>
             </div>
-            <div className="flex-1 h-px bg-gold/20 max-w-[50px] sm:max-w-[100px]" />
-            <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full border border-cream/20 flex items-center justify-center text-xs">2</span>
+            <div className={`flex-1 h-px max-w-[50px] sm:max-w-[100px] transition-colors duration-300 ${step >= 2 ? 'bg-gold' : 'bg-gold/20'}`} />
+            <div className={`flex items-center gap-2 ${step >= 2 ? 'text-gold' : ''} transition-colors duration-300`}>
+              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${step >= 2 ? 'bg-gold text-[#2A1A17]' : 'border border-cream/20'}`}>2</span>
               <span>الدفع</span>
             </div>
-            <div className="flex-1 h-px bg-gold/20 max-w-[50px] sm:max-w-[100px]" />
-            <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full border border-cream/20 flex items-center justify-center text-xs">3</span>
+            <div className={`flex-1 h-px max-w-[50px] sm:max-w-[100px] transition-colors duration-300 ${step >= 3 ? 'bg-gold' : 'bg-gold/20'}`} />
+            <div className={`flex items-center gap-2 ${step >= 3 ? 'text-gold' : ''} transition-colors duration-300`}>
+              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${step >= 3 ? 'bg-gold text-[#2A1A17]' : 'border border-cream/20'}`}>3</span>
               <span>التأكيد</span>
             </div>
           </div>
@@ -324,334 +325,325 @@ _شكراً لاختياركم أرياف - صلالة_ ✨`;
           {/* Main Form Fields */}
           <div className="lg:col-span-8 space-y-8">
             
-            {/* 1. Customer Information */}
-            <div className="bg-[#FAF8F5] p-6 sm:p-8 shadow-sm border border-gold/10 rounded-2xl">
-              <h2 className="text-xl font-bold text-[#2A1A17] mb-6 font-alexandria flex items-center justify-between">
-                <span>بيانات العميل</span>
-              </h2>
+            {/* 1. Customer Information (Step 1) */}
+            {step === 1 && (
+              <div className="bg-[#FAF8F5] p-6 sm:p-8 border border-gold/10 rounded-[2px]">
+                <h2 className="text-xl font-bold text-[#2A1A17] mb-6 font-alexandria flex items-center justify-between">
+                  <span>بيانات العميل</span>
+                </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-bold text-[#2A1A17] mb-2">الاسم الكامل <span className="text-red-500">*</span></label>
-                  <input
-                    type="text"
-                    name="fullName"
-                    required
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    placeholder="سالم بن أحمد"
-                    className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm text-[#2A1A17] placeholder:text-taupe/50 rounded-xl focus:bg-[#FFFDF8] focus:border-gold/50 focus:ring-1 focus:ring-gold/30 outline-none transition-all duration-300 shadow-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-[#2A1A17] mb-2">رقم الهاتف <span className="text-red-500">*</span></label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    required
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="77414193"
-                    className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm text-[#2A1A17] placeholder:text-taupe/50 rounded-xl focus:bg-[#FFFDF8] focus:border-gold/50 focus:ring-1 focus:ring-gold/30 outline-none transition-all duration-300 shadow-sm text-left"
-                    dir="ltr"
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-bold text-[#2A1A17] mb-2">البريد الإلكتروني (اختياري)</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="example@mail.com"
-                    className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm text-[#2A1A17] placeholder:text-taupe/50 rounded-xl focus:bg-[#FFFDF8] focus:border-gold/50 focus:ring-1 focus:ring-gold/30 outline-none transition-all duration-300 shadow-sm text-left"
-                    dir="ltr"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* 2. Location */}
-            <div className="bg-[#FAF8F5] p-6 sm:p-8 shadow-sm border border-gold/10 rounded-2xl">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-                <h2 className="text-xl font-bold text-[#2A1A17] font-alexandria">موقع التوصيل</h2>
-                <button
-                  type="button"
-                  onClick={handleDetectLocation}
-                  disabled={locating}
-                  className="px-5 py-2.5 bg-gold/10 hover:bg-gold/20 text-[#2A1A17] font-bold text-xs flex items-center justify-center gap-2 transition-colors border border-gold/20 rounded-xl"
-                >
-                  <MapPin className={`w-3.5 h-3.5 ${locating ? "animate-spin" : ""}`} />
-                  <span>{locating ? "جاري التحديد..." : "تحديد موقعي (GPS)"}</span>
-                </button>
-              </div>
-
-              {locationUrl && (
-                <div className="mb-6 p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                  <div className="text-sm">
-                    <p className="font-bold text-emerald-900 mb-1">تم حفظ الموقع الجغرافي بنجاح</p>
-                    <a href={locationUrl} target="_blank" rel="noreferrer" className="text-xs text-emerald-700 underline">عرض على الخريطة</a>
-                  </div>
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-bold text-[#2A1A17] mb-2">الدولة <span className="text-red-500">*</span></label>
-                  <select
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm text-[#2A1A17] rounded-xl focus:bg-[#FFFDF8] focus:border-gold/50 focus:ring-1 focus:ring-gold/30 outline-none cursor-pointer transition-all duration-300 shadow-sm"
-                  >
-                    <option value="سلطنة عُمان">سلطنة عُمان</option>
-                    <option value="دول الخليج العربي">دول الخليج العربي</option>
-                    <option value="أخرى">دول أخرى</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-[#2A1A17] mb-2">المدينة / الولاية <span className="text-red-500">*</span></label>
-                  {formData.country === "سلطنة عُمان" ? (
-                    <select
-                      name="city"
-                      value={formData.city}
-                      onChange={handleInputChange}
-                      className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm text-[#2A1A17] rounded-xl focus:bg-[#FFFDF8] focus:border-gold/50 focus:ring-1 focus:ring-gold/30 outline-none cursor-pointer transition-all duration-300 shadow-sm"
-                    >
-                      {omanWilayats.map((c) => <option key={c} value={c}>{c}</option>)}
-                    </select>
-                  ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-medium text-taupe mb-2">الاسم الكامل <span className="text-burgundy">*</span></label>
                     <input
                       type="text"
-                      name="city"
+                      name="fullName"
                       required
-                      value={formData.city}
+                      value={formData.fullName}
                       onChange={handleInputChange}
-                      placeholder="اسم المدينة"
-                      className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm text-[#2A1A17] placeholder:text-taupe/50 rounded-xl focus:bg-[#FFFDF8] focus:border-gold/50 focus:ring-1 focus:ring-gold/30 outline-none transition-all duration-300 shadow-sm"
+                      placeholder="سالم بن أحمد"
+                      className="w-full px-4 py-3 bg-[#FFFDF8] border-b border-gold/30 text-sm text-[#2A1A17] focus:border-gold outline-none transition-all duration-300 rounded-[2px]"
                     />
-                  )}
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-taupe mb-2">رقم الهاتف <span className="text-burgundy">*</span></label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      required
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="77414193"
+                      className="w-full px-4 py-3 bg-[#FFFDF8] border-b border-gold/30 text-sm text-[#2A1A17] focus:border-gold outline-none transition-all duration-300 rounded-[2px]"
+                      dir="ltr"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-medium text-taupe mb-2">البريد الإلكتروني (اختياري)</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="example@mail.com"
+                      className="w-full px-4 py-3 bg-[#FFFDF8] border-b border-gold/30 text-sm text-[#2A1A17] focus:border-gold outline-none transition-all duration-300 rounded-[2px]"
+                      dir="ltr"
+                    />
+                  </div>
                 </div>
+              </div>
+            )}
+
+            {/* 1. Location (Step 1) */}
+            {step === 1 && (
+              <div className="bg-[#FAF8F5] p-6 sm:p-8 border border-gold/10 rounded-[2px] space-y-6">
                 <div>
-                  <label className="block text-xs font-bold text-[#2A1A17] mb-2">الحي / المنطقة</label>
-                  <input
-                    type="text"
-                    name="area"
-                    value={formData.area}
-                    onChange={handleInputChange}
-                    placeholder="مثال: الدهاريز"
-                    className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm text-[#2A1A17] placeholder:text-taupe/50 rounded-xl focus:bg-[#FFFDF8] focus:border-gold/50 focus:ring-1 focus:ring-gold/30 outline-none transition-all duration-300 shadow-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-[#2A1A17] mb-2">العنوان التفصيلي <span className="text-red-500">*</span></label>
-                  <input
-                    type="text"
-                    name="address"
-                    required
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    placeholder="الشارع، رقم المبنى"
-                    className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm text-[#2A1A17] placeholder:text-taupe/50 rounded-xl focus:bg-[#FFFDF8] focus:border-gold/50 focus:ring-1 focus:ring-gold/30 outline-none transition-all duration-300 shadow-sm"
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-bold text-[#2A1A17] mb-2">ملاحظات التوصيل</label>
-                  <textarea
-                    name="notes"
-                    rows={2}
-                    value={formData.notes}
-                    onChange={handleInputChange}
-                    placeholder="أي ملاحظات تفيد المندوب..."
-                    className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm text-[#2A1A17] placeholder:text-taupe/50 rounded-xl focus:bg-[#FFFDF8] focus:border-gold/50 focus:ring-1 focus:ring-gold/30 outline-none transition-all duration-300 shadow-sm resize-y"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* 3. Delivery Method */}
-            <div className="bg-[#FAF8F5] p-6 sm:p-8 shadow-sm border border-gold/10 rounded-2xl">
-              <h2 className="text-xl font-bold text-[#2A1A17] mb-6 font-alexandria">طريقة التوصيل</h2>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <label className={`p-5 border cursor-pointer flex items-start gap-4 transition-colors ${
-                  deliveryMethod === "home" ? "border-[#2A1A17] bg-[#FFFDF8]" : "border-gold/20 bg-white"
-                }`}>
-                  <input
-                    type="radio"
-                    name="delivery"
-                    checked={deliveryMethod === "home"}
-                    onChange={() => setDeliveryMethod("home")}
-                    className="mt-1 accent-[#2A1A17]"
-                  />
-                  <div>
-                    <div className="flex items-center gap-2 font-bold text-sm text-[#2A1A17] mb-1">
-                      <Truck className="w-4 h-4 text-gold" />
-                      <span>توصيل للمنزل</span>
+                  <h2 className="text-xl font-bold text-[#2A1A17] font-alexandria mb-6">موقع التوصيل</h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-xs font-medium text-taupe mb-2">الدولة <span className="text-burgundy">*</span></label>
+                      <select
+                        name="country"
+                        value={formData.country}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 bg-[#FFFDF8] border-b border-gold/30 text-sm text-[#2A1A17] focus:border-gold outline-none transition-all duration-300 rounded-[2px]"
+                      >
+                        <option value="سلطنة عُمان">سلطنة عُمان</option>
+                        <option value="دول الخليج العربي">دول الخليج العربي</option>
+                        <option value="أخرى">دول أخرى</option>
+                      </select>
                     </div>
-                    <p className="text-xs text-taupe font-light leading-relaxed">توصيل سريع ومضمون إلى الوجهة المحددة.</p>
-                  </div>
-                </label>
-
-                <label className={`p-5 border cursor-pointer flex items-start gap-4 transition-colors ${
-                  deliveryMethod === "pickup" ? "border-[#2A1A17] bg-[#FFFDF8]" : "border-gold/20 bg-white"
-                }`}>
-                  <input
-                    type="radio"
-                    name="delivery"
-                    checked={deliveryMethod === "pickup"}
-                    onChange={() => setDeliveryMethod("pickup")}
-                    className="mt-1 accent-[#2A1A17]"
-                  />
-                  <div>
-                    <div className="flex items-center gap-2 font-bold text-sm text-[#2A1A17] mb-1">
-                      <Building2 className="w-4 h-4 text-gold" />
-                      <span>استلام من الفرع</span>
+                    <div>
+                      <label className="block text-xs font-medium text-taupe mb-2">المدينة / الولاية <span className="text-burgundy">*</span></label>
+                      {formData.country === "سلطنة عُمان" ? (
+                        <select
+                          name="city"
+                          value={formData.city}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 bg-[#FFFDF8] border-b border-gold/30 text-sm text-[#2A1A17] focus:border-gold outline-none transition-all duration-300 rounded-[2px]"
+                        >
+                          {omanWilayats.map((c) => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                      ) : (
+                        <input
+                          type="text"
+                          name="city"
+                          required
+                          value={formData.city}
+                          onChange={handleInputChange}
+                          placeholder="اسم المدينة"
+                          className="w-full px-4 py-3 bg-[#FFFDF8] border-b border-gold/30 text-sm text-[#2A1A17] focus:border-gold outline-none transition-all duration-300 rounded-[2px]"
+                        />
+                      )}
                     </div>
-                    <p className="text-xs text-taupe font-light leading-relaxed">استلام مباشر من بوتيك أرياف بصلالة أو مسقط.</p>
+                    <div className="sm:col-span-2">
+                      <label className="block text-xs font-medium text-taupe mb-2">العنوان التفصيلي <span className="text-burgundy">*</span></label>
+                      <input
+                        type="text"
+                        name="address"
+                        required
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        placeholder="الحي، الشارع، رقم المبنى..."
+                        className="w-full px-4 py-3 bg-[#FFFDF8] border-b border-gold/30 text-sm text-[#2A1A17] focus:border-gold outline-none transition-all duration-300 rounded-[2px]"
+                      />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="block text-xs font-medium text-taupe mb-2">ملاحظات التوصيل (اختياري)</label>
+                      <textarea
+                        name="notes"
+                        rows={2}
+                        value={formData.notes}
+                        onChange={handleInputChange}
+                        placeholder="أي ملاحظات تفيد المندوب..."
+                        className="w-full px-4 py-3 bg-[#FFFDF8] border-b border-gold/30 text-sm text-[#2A1A17] focus:border-gold outline-none transition-all duration-300 rounded-[2px] resize-y"
+                      />
+                    </div>
                   </div>
-                </label>
-              </div>
-
-              {/* Delivery Notices */}
-              <div className="mt-6 space-y-3">
-                <div className="p-4 bg-[#FFFDF8] border border-gold/10 flex items-start gap-3">
-                  <Info className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                  <p className="text-xs text-taupe font-bold">رسوم التوصيل تُحسب على العميل حسب الوجهة.</p>
+                </div>
+                
+                <div className="pt-6 border-t border-gold/10 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!formData.fullName.trim() || !formData.phone.trim() || !formData.address.trim()) {
+                        showToast("يرجى ملء الاسم، الجوال، والعنوان أولاً", "error");
+                        return;
+                      }
+                      setStep(2);
+                    }}
+                    className="px-8 py-3 bg-burgundy text-cream text-sm font-medium rounded-[2px] hover:bg-burgundy-light transition-all"
+                  >
+                    التالي: الدفع
+                  </button>
                 </div>
               </div>
-            </div>
+            )}
 
-            {/* 4. Payment Method */}
-            <div className="bg-[#FAF8F5] p-6 sm:p-8 shadow-sm border border-gold/10 rounded-2xl">
-              <h2 className="text-xl font-bold text-[#2A1A17] mb-6 font-alexandria">طريقة الدفع</h2>
+            {/* Step 2: Delivery & Payment */}
+            {step === 2 && (
+              <div className="space-y-8">
+                {/* 2. Delivery Method */}
+                <div className="bg-[#FAF8F5] p-6 sm:p-8 border border-gold/10 rounded-[2px]">
+                  <h2 className="text-xl font-bold text-[#2A1A17] mb-6 font-alexandria">طريقة التوصيل</h2>
 
-              {/* Notice for Outside Oman */}
-              {formData.country !== "سلطنة عُمان" && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3">
-                  <Info className="w-4 h-4 text-red-700 shrink-0 mt-0.5" />
-                  <p className="text-xs text-red-900 font-bold">للطلبات خارج سلطنة عُمان، يجب إتمام الدفع مقدمًا قبل التسليم.</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <label className={`p-5 border cursor-pointer flex items-start gap-4 transition-colors rounded-[2px] ${
+                      deliveryMethod === "home" ? "border-burgundy bg-[#FFFDF8]" : "border-gold/20 bg-white"
+                    }`}>
+                      <input
+                        type="radio"
+                        name="delivery"
+                        checked={deliveryMethod === "home"}
+                        onChange={() => setDeliveryMethod("home")}
+                        className="mt-1 accent-burgundy"
+                      />
+                      <div>
+                        <div className="flex items-center gap-2 font-medium text-sm text-[#2A1A17] mb-1">
+                          <Truck className="w-4 h-4 text-gold" />
+                          <span>توصيل للمنزل</span>
+                        </div>
+                        <p className="text-xs text-taupe font-light leading-relaxed">توصيل سريع إلى وجهتك المحددة.</p>
+                      </div>
+                    </label>
+
+                    <label className={`p-5 border cursor-pointer flex items-start gap-4 transition-colors rounded-[2px] ${
+                      deliveryMethod === "pickup" ? "border-burgundy bg-[#FFFDF8]" : "border-gold/20 bg-white"
+                    }`}>
+                      <input
+                        type="radio"
+                        name="delivery"
+                        checked={deliveryMethod === "pickup"}
+                        onChange={() => setDeliveryMethod("pickup")}
+                        className="mt-1 accent-burgundy"
+                      />
+                      <div>
+                        <div className="flex items-center gap-2 font-medium text-sm text-[#2A1A17] mb-1">
+                          <Building2 className="w-4 h-4 text-gold" />
+                          <span>استلام من الفرع</span>
+                        </div>
+                        <p className="text-xs text-taupe font-light leading-relaxed">استلام مباشر من فرع أرياف.</p>
+                      </div>
+                    </label>
+                  </div>
                 </div>
-              )}
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <label className={`p-5 border cursor-pointer flex flex-col gap-3 transition-colors ${
-                  paymentMethod === "whatsapp" ? "border-[#2A1A17] bg-[#FFFDF8]" : "border-gold/20 bg-white"
-                }`}>
-                  <div className="flex items-center justify-between">
-                    <MessageCircle className={`w-5 h-5 ${paymentMethod === "whatsapp" ? "text-emerald-600" : "text-taupe"}`} />
-                    <input type="radio" checked={paymentMethod === "whatsapp"} onChange={() => setPaymentMethod("whatsapp")} className="accent-[#2A1A17]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-sm text-[#2A1A17]">عبر واتساب</h4>
-                    <p className="text-[11px] text-taupe mt-1 font-light">تأكيد مباشر</p>
-                  </div>
-                </label>
+                {/* 3. Payment Method */}
+                <div className="bg-[#FAF8F5] p-6 sm:p-8 border border-gold/10 rounded-[2px]">
+                  <h2 className="text-xl font-bold text-[#2A1A17] mb-6 font-alexandria">طريقة الدفع</h2>
 
-                <label className={`p-5 border cursor-pointer flex flex-col gap-3 transition-colors ${
-                  paymentMethod === "bank" ? "border-[#2A1A17] bg-[#FFFDF8]" : "border-gold/20 bg-white"
-                }`}>
-                  <div className="flex items-center justify-between">
-                    <CreditCard className={`w-5 h-5 ${paymentMethod === "bank" ? "text-[#2A1A17]" : "text-taupe"}`} />
-                    <input type="radio" checked={paymentMethod === "bank"} onChange={() => setPaymentMethod("bank")} className="accent-[#2A1A17]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-sm text-[#2A1A17]">تحويل بنكي</h4>
-                    <p className="text-[11px] text-taupe mt-1 font-light">إيداع للحساب المعتمد</p>
-                  </div>
-                </label>
-              </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <label className={`p-5 border cursor-pointer flex flex-col gap-3 transition-colors rounded-[2px] ${
+                      paymentMethod === "whatsapp" ? "border-burgundy bg-[#FFFDF8]" : "border-gold/20 bg-white"
+                    }`}>
+                      <div className="flex items-center justify-between">
+                        <MessageCircle className={`w-5 h-5 ${paymentMethod === "whatsapp" ? "text-burgundy" : "text-taupe"}`} />
+                        <input type="radio" checked={paymentMethod === "whatsapp"} onChange={() => setPaymentMethod("whatsapp")} className="accent-burgundy" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-sm text-[#2A1A17]">عبر واتساب</h4>
+                        <p className="text-[11px] text-taupe mt-1 font-light">تأكيد مباشر بعد الطلب</p>
+                      </div>
+                    </label>
 
-              {/* Bank Details Area */}
-              {paymentMethod === "bank" && (
-                <div className="mt-8 space-y-6 border-t border-gold/10 pt-6">
-                  {/* Bank Accounts Stack */}
-                  <div className="space-y-4">
-                    <h3 className="text-sm font-bold text-[#2A1A17] flex items-center gap-2">
-                      <Building className="w-4 h-4 text-gold" />
-                      اختر الحساب البنكي للتحويل:
-                    </h3>
-                    
-                    <div className="grid grid-cols-1 gap-4">
-                      {bankAccounts.map((bank) => {
-                        const isSelected = selectedBankId === bank.id;
-                        return (
-                          <div 
-                            key={bank.id} 
-                            onClick={() => setSelectedBankId(bank.id)}
-                            className={`border p-5 cursor-pointer transition-colors ${isSelected ? "border-[#2A1A17] bg-[#FFFDF8]" : "border-gold/20 bg-white"}`}
-                          >
-                            <div className="flex items-center justify-between mb-4">
-                              <h4 className="font-bold text-sm text-[#2A1A17]">{bank.bank_name}</h4>
-                              <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${isSelected ? "border-[#2A1A17]" : "border-gold/40"}`}>
-                                {isSelected && <div className="w-2 h-2 rounded-full bg-[#2A1A17]" />}
-                              </div>
-                            </div>
-                            
-                            <div className="space-y-3">
-                              <div className="text-xs text-taupe">المستفيد: <strong className="text-[#2A1A17]">{bank.account_holder}</strong></div>
-                              
-                              <div className="flex flex-col sm:flex-row gap-3">
-                                <div className="flex-1 bg-[#FAF8F5] border border-gold/10 p-3 flex items-center justify-between">
-                                  <div>
-                                    <span className="text-[10px] text-taupe block mb-1">رقم الحساب</span>
-                                    <span className="font-mono font-bold text-[#2A1A17] text-sm" dir="ltr">{bank.account_number}</span>
-                                  </div>
-                                  <button
-                                    type="button"
-                                    onClick={(e) => { e.stopPropagation(); handleCopy(bank.account_number, `acc-${bank.id}`); }}
-                                    className="p-2 text-taupe hover:text-gold transition-colors"
-                                  >
-                                    {copiedKey === `acc-${bank.id}` ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
-                                  </button>
+                    <label className={`p-5 border cursor-pointer flex flex-col gap-3 transition-colors rounded-[2px] ${
+                      paymentMethod === "bank" ? "border-burgundy bg-[#FFFDF8]" : "border-gold/20 bg-white"
+                    }`}>
+                      <div className="flex items-center justify-between">
+                        <CreditCard className={`w-5 h-5 ${paymentMethod === "bank" ? "text-burgundy" : "text-taupe"}`} />
+                        <input type="radio" checked={paymentMethod === "bank"} onChange={() => setPaymentMethod("bank")} className="accent-burgundy" />
+                      </div>
+                      <div>
+                        <h4 className="font-medium text-sm text-[#2A1A17]">تحويل بنكي</h4>
+                        <p className="text-[11px] text-taupe mt-1 font-light">إيداع للحساب المعتمد</p>
+                      </div>
+                    </label>
+                  </div>
+
+                  {paymentMethod === "bank" && (
+                    <div className="mt-8 space-y-6 border-t border-gold/10 pt-6">
+                      <div className="grid grid-cols-1 gap-4">
+                        {bankAccounts.map((bank) => {
+                          const isSelected = selectedBankId === bank.id;
+                          return (
+                            <div 
+                              key={bank.id} 
+                              onClick={() => setSelectedBankId(bank.id)}
+                              className={`border p-5 cursor-pointer transition-colors rounded-[2px] ${isSelected ? "border-burgundy bg-[#FFFDF8]" : "border-gold/20 bg-white"}`}
+                            >
+                              <div className="flex items-center justify-between mb-4">
+                                <h4 className="font-medium text-sm text-[#2A1A17]">{bank.bank_name}</h4>
+                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${isSelected ? "border-burgundy" : "border-gold/40"}`}>
+                                  {isSelected && <div className="w-2 h-2 rounded-full bg-burgundy" />}
                                 </div>
-
-                                {bank.iban && (
-                                  <div className="flex-1 bg-[#FAF8F5] border border-gold/10 p-3 flex items-center justify-between overflow-hidden">
-                                    <div className="truncate pr-2">
-                                      <span className="text-[10px] text-taupe block mb-1">الآيبان IBAN</span>
-                                      <span className="font-mono font-bold text-[#2A1A17] text-xs sm:text-sm truncate block" dir="ltr">{bank.iban}</span>
+                              </div>
+                              <div className="space-y-3">
+                                <div className="text-xs text-taupe">المستفيد: <strong className="text-[#2A1A17]">{bank.account_holder}</strong></div>
+                                <div className="flex flex-col sm:flex-row gap-3">
+                                  <div className="flex-1 bg-[#FAF8F5] border border-gold/10 p-3 flex items-center justify-between">
+                                    <div>
+                                      <span className="text-[10px] text-taupe block mb-1">رقم الحساب</span>
+                                      <span className="font-mono font-medium text-[#2A1A17] text-sm" dir="ltr">{bank.account_number}</span>
                                     </div>
                                     <button
                                       type="button"
-                                      onClick={(e) => { e.stopPropagation(); handleCopy(bank.iban, `iban-${bank.id}`); }}
-                                      className="p-2 text-taupe hover:text-gold transition-colors shrink-0"
+                                      onClick={(e) => { e.stopPropagation(); handleCopy(bank.account_number, `acc-${bank.id}`); }}
+                                      className="p-2 text-taupe hover:text-gold transition-colors"
                                     >
-                                      {copiedKey === `iban-${bank.id}` ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                                      {copiedKey === `acc-${bank.id}` ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
                                     </button>
                                   </div>
-                                )}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-
-                  {/* Transfer Ref */}
-                  <div className="pt-4 border-t border-gold/10">
-                    <label className="block text-xs font-bold text-[#2A1A17] mb-2">رقم الحوالة البنكية (اختياري)</label>
-                    <input
-                      type="text"
-                      value={transferRef}
-                      onChange={(e) => setTransferRef(e.target.value)}
-                      placeholder="رقم العملية / Reference"
-                      className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm font-mono text-[#2A1A17] placeholder:text-taupe/50 rounded-xl focus:bg-[#FFFDF8] focus:border-gold/50 focus:ring-1 focus:ring-gold/30 outline-none transition-all duration-300 shadow-sm text-left"
-                      dir="ltr"
-                    />
-                    <p className="mt-2 text-xs text-taupe font-light">بعد التحويل، سيُطلب منك إرفاق صورة الإيصال مباشرةً عبر واتساب.</p>
-                  </div>
-
+                  )}
                 </div>
-              )}
-            </div>
+
+                <div className="flex items-center justify-between mt-6">
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="px-6 py-3 text-taupe text-sm font-medium hover:text-burgundy transition-all"
+                  >
+                    السابق
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStep(3)}
+                    className="px-8 py-3 bg-burgundy text-cream text-sm font-medium rounded-[2px] hover:bg-burgundy-light transition-all"
+                  >
+                    التالي: مراجعة الطلب
+                  </button>
+                </div>
+              </div>
+            )}
+            
+            {/* Step 3: Confirmation */}
+            {step === 3 && (
+              <div className="bg-[#FAF8F5] p-6 sm:p-12 border border-gold/10 rounded-[2px] flex flex-col items-center justify-center text-center space-y-6">
+                <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mb-2">
+                  <ShieldCheck className="w-8 h-8 text-gold" />
+                </div>
+                <h2 className="text-2xl font-bold text-[#2A1A17] font-alexandria">هل أنت مستعد لإتمام الطلب؟</h2>
+                <p className="text-sm text-taupe max-w-md">يرجى مراجعة تفاصيل طلبك في القائمة الجانبية، والتأكد من المنتجات وعنوان التوصيل قبل تأكيد الطلب النهائي.</p>
+                
+                <div className="flex items-center gap-4 pt-8 w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={() => setStep(2)}
+                    className="flex-1 sm:flex-none px-6 py-4 text-taupe border border-gold/20 text-sm font-medium rounded-[2px] hover:bg-gold/5 transition-all"
+                  >
+                    السابق
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-1 sm:flex-none px-8 py-4 bg-burgundy text-cream text-sm font-medium rounded-[2px] hover:bg-burgundy-light transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span>جاري الإرسال...</span>
+                        <div className="w-4 h-4 border-2 border-cream/30 border-t-cream rounded-full animate-spin" />
+                      </>
+                    ) : (
+                      <>
+                        <span>إتمام الطلب الآن</span>
+                        <CheckCircle2 className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Sidebar Summary */}
           <div className="lg:col-span-4">
-            <div className="bg-[#FAF8F5] border border-gold/20 p-6 sm:p-8 lg:sticky lg:top-28">
+            <div className="bg-[#FAF8F5] border border-gold/20 p-6 sm:p-8 lg:sticky lg:top-28 rounded-[2px]">
               <h3 className="text-lg font-bold text-[#2A1A17] border-b border-gold/10 pb-4 mb-6 font-alexandria">
                 مراجعة الطلب
               </h3>
@@ -696,25 +688,27 @@ _شكراً لاختياركم أرياف - صلالة_ ✨`;
                 </div>
               </div>
 
-              <div className="hidden sm:block mt-8">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-4 bg-[#2A1A17] hover:bg-gold transition-colors text-cream font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span>جارٍ تأكيد الطلب...</span>
-                      <div className="w-4 h-4 border-2 border-cream/30 border-t-cream rounded-full animate-spin" />
-                    </>
-                  ) : (
-                    <>
-                      <span>إتمام الطلب النهائي</span>
-                      <CheckCircle2 className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-              </div>
+              {step === 3 && (
+                <div className="mt-8">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full py-4 bg-burgundy hover:bg-burgundy-light transition-colors text-cream font-medium text-sm flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed rounded-[2px]"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span>جاري الإرسال...</span>
+                        <div className="w-4 h-4 border-2 border-cream/30 border-t-cream rounded-full animate-spin" />
+                      </>
+                    ) : (
+                      <>
+                        <span>إتمام الطلب النهائي</span>
+                        <CheckCircle2 className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
 
               <div className="mt-6 flex items-center gap-2 justify-center text-[10px] text-taupe">
                 <ShieldCheck className="w-4 h-4 text-gold shrink-0" />

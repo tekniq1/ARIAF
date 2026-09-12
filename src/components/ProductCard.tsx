@@ -11,7 +11,9 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
   const { wishlist, toggleWishlist, addToCart, formatPrice } = useStore();
+  
   const isWishlisted = wishlist.includes(product.id);
   const isOutOfStock = product.stock_quantity <= 0;
 
@@ -28,23 +30,35 @@ export default function ProductCard({ product }: ProductCardProps) {
   // Determine Primary Badge
   let primaryBadge = null;
   if (hasDiscount) {
-    primaryBadge = <span className="bg-[#FAF0DC] text-[#8C6721] px-2 py-0.5 rounded-sm text-[10px] font-bold border border-[#D9B978]/30">-{discountPercent}% خصم</span>;
+    primaryBadge = <span className="bg-[#2A1A17] text-cream px-2 py-1 rounded-[2px] text-[10px] font-bold tracking-widest shadow-sm">-{discountPercent}%</span>;
   } else if (product.is_best_seller) {
-    primaryBadge = <span className="bg-cream/90 text-burgundy px-2 py-0.5 rounded-sm text-[10px] font-bold border border-gold/30">الأكثر طلباً</span>;
+    primaryBadge = <span className="bg-gold text-burgundy px-2 py-1 rounded-[2px] text-[10px] font-bold tracking-widest shadow-sm">الأكثر طلباً</span>;
   } else if (product.is_new) {
-    primaryBadge = <span className="bg-cream/90 text-taupe px-2 py-0.5 rounded-sm text-[10px] font-bold border border-taupe/20">جديد</span>;
+    primaryBadge = <span className="bg-white/90 text-taupe px-2 py-1 rounded-[2px] text-[10px] font-bold tracking-widest shadow-sm border border-gold/10">جديد</span>;
   }
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isOutOfStock) return;
+    
+    setIsAdding(true);
+    setTimeout(() => {
+      addToCart(product);
+      setIsAdding(false);
+    }, 600);
+  };
 
   return (
     <motion.div
-      whileHover={{ y: isOutOfStock ? 0 : -4 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className={`group relative flex flex-col bg-white rounded-2xl border border-transparent hover:border-gold/20 hover:shadow-luxury transition-all duration-300 overflow-hidden ${
-        isOutOfStock ? "opacity-80 grayscale-[20%]" : ""
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className={`group relative flex flex-col bg-transparent transition-all duration-500 ${
+        isOutOfStock ? "opacity-70 grayscale-[30%]" : ""
       }`}
     >
-      {/* Product Image Frame — warm neutral stage, supports bottles, jars, boxes alike */}
-      <div className="relative aspect-[4/5] bg-gradient-to-b from-[#F5F0E8] to-[#EDE7D8] p-5 flex items-center justify-center overflow-hidden">
+      {/* Product Image Frame */}
+      <div className="relative aspect-[4/5] sm:aspect-[3/4] bg-[#F8F5F0] mb-4 flex items-center justify-center overflow-hidden rounded-[2px] group-hover:bg-[#FAF8F5] transition-colors duration-500">
+        
         {/* Wishlist Button */}
         <button
           onClick={(e) => {
@@ -52,20 +66,18 @@ export default function ProductCard({ product }: ProductCardProps) {
             e.stopPropagation();
             toggleWishlist(product.id);
           }}
-          className={`absolute top-3 left-3 z-10 p-2 rounded-full backdrop-blur-sm transition-all duration-300 ${
-            isWishlisted
-              ? "bg-cream text-burgundy shadow-sm"
-              : "bg-cream/50 text-taupe hover:text-burgundy hover:bg-cream"
+          className={`absolute top-3 left-3 z-10 p-2 rounded-full bg-white/80 shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300 hover:bg-white hover:scale-110 ${
+            isWishlisted ? "text-burgundy" : "text-taupe/40 hover:text-burgundy"
           }`}
           aria-label={isWishlisted ? "إزالة من المفضلة" : "إضافة للمفضلة"}
         >
-          <Heart className={`w-4 h-4 ${isWishlisted ? "fill-current" : ""}`} />
+          <Heart className={`w-4 h-4 ${isWishlisted ? "fill-current" : ""}`} strokeWidth={isWishlisted ? 2 : 1.5} />
         </button>
 
         {/* Primary Badge */}
         <div className="absolute top-3 right-3 z-10">
           {isOutOfStock ? (
-            <span className="bg-taupe/10 text-taupe px-2 py-0.5 rounded-sm text-[10px] font-bold border border-taupe/20">
+            <span className="text-taupe px-2 py-1 text-[10px] tracking-wider bg-white/80 rounded-[2px] font-bold border border-graySoft">
               نفد المخزون
             </span>
           ) : (
@@ -73,66 +85,66 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
 
-        {/* Image — object-cover for flat/box products, centered */}
-        <Link to={`/product/${product.slug}`} className="relative w-full h-full flex items-center justify-center">
+        {/* Image — Edge-to-edge feel with mix-blend for unified background */}
+        <Link to={`/product/${product.slug}`} className="relative w-full h-full flex items-center justify-center p-4">
           <img
             src={primaryImage}
             alt={product.name_ar}
             loading="lazy"
             onLoad={() => setImgLoaded(true)}
-            className={`w-full h-full object-contain filter drop-shadow-md group-hover:drop-shadow-xl group-hover:scale-[1.03] transition-all duration-500 ${
+            className={`w-full h-full object-contain mix-blend-multiply drop-shadow-md group-hover:drop-shadow-xl group-hover:scale-105 transition-all duration-700 ${
               imgLoaded ? "opacity-100" : "opacity-0"
             }`}
           />
-          {/* Subtle floor shadow */}
-          <div className={`absolute bottom-[4%] w-[55%] h-3 bg-black/10 blur-[12px] rounded-[100%] pointer-events-none transition-opacity duration-500 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`} />
         </Link>
       </div>
 
       {/* Product Info (Hierarchical) */}
-      <div className="p-4 flex flex-col flex-grow bg-white">
+      <div className="px-1 flex flex-col flex-grow">
+        
         {/* Title */}
-        <Link to={`/product/${product.slug}`} className="mb-1 block">
-          <h3 className="text-base font-bold text-burgundy group-hover:text-gold-dark transition-colors truncate">
+        <Link to={`/product/${product.slug}`} className="mb-3 block text-center">
+          <h3 className="text-[15px] font-bold text-[#2A1A17] font-alexandria group-hover:text-gold-dark transition-colors truncate">
             {product.name_ar}
           </h3>
-          <p className="text-[10px] text-taupe uppercase font-serif tracking-widest mt-0.5 truncate">
+          <p className="text-[9px] text-taupe uppercase font-serif tracking-[0.25em] mt-1.5 truncate">
             {product.name_en}
           </p>
         </Link>
 
-        {/* Rating (Secondary) */}
-        <div className="flex items-center gap-1 text-[10px] text-taupe mb-3">
-          <Star className="w-3 h-3 fill-gold text-gold" />
-          <span>{product.average_rating || 5.0}</span>
-          <span className="opacity-60">({product.total_reviews || 0})</span>
-        </div>
-
-        <div className="mt-auto pt-1 flex items-center justify-between gap-1 sm:gap-2">
-          {/* Price */}
-          <div className="flex flex-col min-w-0">
+        {/* Price & CTA Container */}
+        <div className="mt-auto flex flex-col gap-3">
+          
+          <div className="flex items-center justify-center gap-2">
+            <span className={`text-sm font-bold ${isOutOfStock ? "text-taupe" : "text-[#2A1A17]"}`}>
+              {formatPrice(product.sale_price ?? product.price)}
+            </span>
             {hasDiscount && (
-              <span className="text-[10px] text-taupe line-through -mb-0.5 truncate">
+              <span className="text-[11px] text-taupe/60 line-through">
                 {formatPrice(product.price)}
               </span>
             )}
-            <span className={`text-xs sm:text-sm font-bold truncate ${isOutOfStock ? "text-taupe" : "text-burgundy"}`}>
-              {formatPrice(product.sale_price ?? product.price)}
-            </span>
           </div>
 
-          {/* Compact CTA */}
           <button
             disabled={isOutOfStock}
-            onClick={() => !isOutOfStock && addToCart(product)}
-            className={`shrink-0 flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-sm transition-all duration-300 text-[10px] sm:text-xs font-semibold ${
+            onClick={handleAddToCart}
+            className={`relative flex items-center justify-center gap-2 px-4 py-2.5 transition-all duration-300 text-[11px] font-bold rounded-[2px] w-full ${
               isOutOfStock
-                ? "bg-beige text-taupe cursor-not-allowed"
-                : "bg-cream text-burgundy border border-gold/20 hover:bg-burgundy hover:text-cream hover:border-burgundy"
+                ? "bg-transparent text-taupe cursor-not-allowed border border-graySoft/50"
+                : "bg-transparent text-[#2A1A17] border border-gold/30 hover:border-gold hover:bg-[#FAF8F5] active:scale-[0.98]"
             }`}
           >
-            <ShoppingBag className="w-3.5 h-3.5" />
-            <span className="hidden min-[400px]:inline">إضافة</span>
+            {/* Scent Dispersal Effect on Card */}
+            {isAdding && (
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0.8 }}
+                animate={{ scale: 1.5, opacity: 0 }}
+                transition={{ duration: 0.7, ease: "easeOut" }}
+                className="absolute inset-0 bg-gold/30 rounded-[2px] blur-[6px] pointer-events-none z-0"
+              />
+            )}
+            <span className="relative z-10">{isAdding ? "جاري الإضافة..." : (isOutOfStock ? "نفد المخزون" : "إضافة للسلة")}</span>
           </button>
         </div>
       </div>

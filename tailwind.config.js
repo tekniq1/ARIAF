@@ -28,7 +28,8 @@ export default {
         taupe: "#8D7B68", // Text Secondary
       },
       fontFamily: {
-        alexandria: ["'Alexandria'", "'Noto Kufi Arabic'", "sans-serif"],
+        tajawal: ["'Tajawal'", "sans-serif"],
+        alexandria: ["'Tajawal'", "sans-serif"], // Keep alexandria mapped to Tajawal so we don't break existing classes
         serif: ["'Playfair Display'", "serif"],
       },
       borderRadius: {
@@ -37,10 +38,10 @@ export default {
         lg: "24px",
       },
       boxShadow: {
-        luxury: "0 10px 40px -10px rgba(62, 39, 35, 0.06)",
-        gold: "0 4px 20px rgba(194, 168, 120, 0.15)",
-        goldHover: "0 8px 30px rgba(194, 168, 120, 0.25)",
-        card: "0 4px 15px rgba(62, 39, 35, 0.03)",
+        luxury: "0 20px 40px -10px rgba(62, 39, 35, 0.04)",
+        gold: "0 8px 30px rgba(194, 168, 120, 0.08)",
+        goldHover: "0 15px 40px rgba(194, 168, 120, 0.12)",
+        card: "0 8px 30px rgba(62, 39, 35, 0.02)",
       },
       backdropBlur: {
         glass: "16px",

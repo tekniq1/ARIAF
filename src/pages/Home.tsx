@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   Sparkles,
@@ -10,7 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { supabase } from "../lib/supabase";
 import { useStore } from "../lib/store";
 import type { Product, Category, Banner, Review } from "../lib/types";
@@ -32,6 +32,15 @@ export default function Home() {
   const [bestSellers, setBestSellers] = useState<Product[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Parallax Setup
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const yParallax = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const opacityParallax = useTransform(scrollYProgress, [0, 1], [1, 0]);
 
   useEffect(() => {
     async function loadHomeData() {
@@ -175,10 +184,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#FFFDF8] text-darkText overflow-hidden">
       {/* 1. HERO SECTION (Luxury Perfume Campaign) */}
-      <section className="relative min-h-[80vh] lg:min-h-[90vh] flex items-center bg-cream overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[80vh] lg:min-h-[90vh] flex items-center bg-cream overflow-hidden">
         
         {/* --- Background ARAYAF Decorations --- */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center">
+        <motion.div style={{ y: useTransform(scrollYProgress, [0, 1], [0, 50]), opacity: opacityParallax }} className="absolute inset-0 pointer-events-none overflow-hidden flex items-center justify-center">
           {/* Organic Frankincense / Smoke glows - Scaled down for mobile */}
           <div className="absolute -top-20 -right-20 w-[300px] h-[300px] lg:w-[600px] lg:h-[600px] bg-gold/15 rounded-full blur-[80px]" />
           <div className="absolute -bottom-10 left-0 w-[400px] h-[300px] lg:w-[800px] lg:h-[500px] bg-burgundy/10 rounded-tr-full blur-[90px]" />
@@ -194,7 +203,7 @@ export default function Home() {
             <path d="M0,900 C300,750 400,250 1000,100" fill="none" stroke="#C2A878" strokeWidth="1.5" className="lg:stroke-[2.5px]" />
             <path d="M100,1000 C400,850 500,350 1100,200" fill="none" stroke="#E8DCC4" strokeWidth="1" className="lg:stroke-[1.5px]" />
           </svg>
-        </div>
+        </motion.div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-20 lg:py-0">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
@@ -203,58 +212,53 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, ease: "easeOut" }}
+              style={{ y: useTransform(scrollYProgress, [0, 1], [0, 80]), opacity: opacityParallax }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
               className="lg:col-span-6 flex flex-col items-center lg:items-start text-center lg:text-right order-1"
             >
-              {/* Trust Indicators Row (Minimal) */}
-              <div className="flex items-center gap-4 sm:gap-6 mb-8 opacity-80">
-                <div className="flex items-center gap-1.5 text-taupe text-xs tracking-wider">
-                  <Sparkles className="w-3.5 h-3.5 text-gold" />
-                  <span>لبان حوجري نقي</span>
-                </div>
-                <div className="w-1 h-1 rounded-full bg-gold/40" />
-                <div className="flex items-center gap-1.5 text-taupe text-xs tracking-wider">
-                  <Award className="w-3.5 h-3.5 text-gold" />
-                  <span>ثبات ملكي</span>
-                </div>
+              {/* Main Headline */}
+              <div className="mb-8">
+                <h2 className="text-xl sm:text-2xl text-gold-dark font-serif tracking-[0.2em] uppercase mb-4 opacity-90">
+                  Arayaf
+                </h2>
+                <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-medium tracking-tight leading-[1.2] font-alexandria text-burgundy">
+                  {headline1}
+                  <span className="block mt-2 text-burgundy-light font-light">{headline2}</span>
+                </h1>
               </div>
 
-              {/* Main Headline */}
-              <h1 className="text-4xl sm:text-5xl lg:text-[64px] font-black tracking-tight leading-[1.1] mb-6 font-alexandria text-burgundy">
-                {headline1}
-                <span className="block mt-2 text-gold font-light italic font-serif opacity-90">{headline2}</span>
-              </h1>
-
               {/* Description */}
-              <p className="text-taupe text-sm sm:text-base leading-relaxed max-w-md mb-10 font-light">
+              <p className="text-taupe text-sm sm:text-base leading-[2] max-w-md mb-12 font-light">
                 {heroDesc}
               </p>
 
               {/* CTAs */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row items-center gap-6 w-full sm:w-auto">
                 <Link
                   to="/shop"
-                  className="w-full sm:w-auto px-10 py-4 rounded-sm text-sm font-bold bg-burgundy text-cream hover:bg-burgundy-light transition-all duration-300 shadow-luxury"
+                  className="w-full sm:w-auto px-10 py-4 rounded-[2px] text-sm font-medium bg-burgundy text-cream hover:bg-burgundy-light transition-all duration-500 relative overflow-hidden group"
                 >
-                  اكتشف المجموعة
+                  <span className="relative z-10">اكتشف المجموعة</span>
+                  <div className="absolute inset-0 bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500 ease-in-out" />
                 </Link>
-                {/* Secondary CTA: Ghost Outline */}
+                {/* Secondary CTA: Clean Text Link */}
                 <a
                   href={`https://wa.me/${rawWhatsApp}?text=${whatsappHeroMessage}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto px-10 py-4 rounded-sm text-sm font-bold border border-burgundy/20 text-burgundy hover:bg-burgundy/5 transition-all duration-300 flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-6 py-4 text-sm font-medium text-burgundy/80 hover:text-burgundy transition-all duration-300 flex items-center justify-center gap-2 border-b border-transparent hover:border-burgundy/30"
                 >
-                  <MessageCircle className="w-4 h-4 text-gold-dark" />
-                  <span>اطلب عبر الواتساب</span>
+                  <MessageCircle className="w-4 h-4 opacity-70" />
+                  <span>الطلب المباشر</span>
                 </a>
               </div>
             </motion.div>
 
             {/* LEFT COLUMN: Editorial Video Frame */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              style={{ y: yParallax, opacity: opacityParallax }}
               transition={{ duration: 1.5, delay: 0.3 }}
               className="lg:col-span-6 flex items-center justify-center lg:justify-end mt-4 lg:mt-0 order-2"
             >
@@ -310,10 +314,10 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8 }}
             className="text-center max-w-2xl mx-auto mb-16"
           >
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-burgundy font-alexandria mb-4 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-burgundy font-alexandria mb-4 tracking-tight">
               مجموعتنا العطرية
             </h2>
             <p className="text-taupe text-sm sm:text-base font-light max-w-md mx-auto leading-relaxed">
@@ -322,10 +326,10 @@ export default function Home() {
           </motion.div>
 
           {/* Elegant Tabs (Horizontal scroll on mobile) */}
-          <div className="flex items-center justify-start sm:justify-center overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-8 mb-16 pb-2 border-b border-gold/10">
+          <div className="flex items-center justify-start sm:justify-center overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-8 mb-16 pb-4">
             <Link
               to="/shop"
-              className="snap-start whitespace-nowrap text-sm font-bold text-burgundy border-b-2 border-gold pb-2 px-1 transition-all"
+              className="snap-start whitespace-nowrap text-sm font-medium text-burgundy border-b border-burgundy pb-2 px-1 transition-all"
             >
               المجموعة الكاملة
             </Link>
@@ -333,7 +337,7 @@ export default function Home() {
               <Link
                 key={c.id}
                 to={`/category/${c.slug}`}
-                className="snap-start whitespace-nowrap text-sm font-medium text-taupe border-b-2 border-transparent pb-2 px-1 hover:text-burgundy hover:border-gold/30 transition-all"
+                className="snap-start whitespace-nowrap text-sm font-light text-taupe border-b border-transparent pb-2 px-1 hover:text-burgundy hover:border-burgundy/30 transition-all"
               >
                 {c.name_ar}
               </Link>
@@ -354,8 +358,8 @@ export default function Home() {
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
-                  className="snap-center shrink-0 w-[85vw] sm:w-auto max-w-sm sm:max-w-none"
+                  transition={{ duration: 0.8, delay: index * 0.1, ease: "easeOut" }}
+                  className="snap-center shrink-0 w-[75vw] sm:w-auto max-w-sm sm:max-w-none"
                 >
                   <ProductCard product={product} />
                 </motion.div>
@@ -367,7 +371,7 @@ export default function Home() {
           <div className="mt-12 sm:mt-16 text-center">
             <Link
               to="/shop"
-              className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-sm text-sm font-bold border border-burgundy/20 text-burgundy hover:bg-burgundy hover:text-cream transition-all duration-300 shadow-sm"
+              className="inline-flex items-center justify-center gap-2 px-10 py-4 text-sm font-medium border-b border-burgundy/30 text-burgundy hover:border-burgundy hover:bg-burgundy/5 transition-all duration-500"
             >
               <span>استكشف مجموعتنا كاملاً</span>
             </Link>

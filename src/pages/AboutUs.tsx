@@ -12,7 +12,7 @@ export default function AboutUs() {
   });
 
   return (
-    <div className="min-h-screen bg-[#FFFDF8] font-cairo">
+    <div className="min-h-screen bg-[#FFFDF8]">
       {/* Editorial Hero */}
       <div className="relative bg-[#2A1A17] text-cream py-24 sm:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Subtle Decorative Motifs */}

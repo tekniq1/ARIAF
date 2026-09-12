@@ -35,7 +35,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFFDF8] font-cairo pb-20">
+    <div className="min-h-screen bg-[#FFFDF8] pb-20">
       
       {/* Page Intro */}
       <div className="relative pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden text-center">
@@ -61,7 +61,7 @@ export default function Contact() {
           <div className="lg:col-span-4 space-y-10 order-1 lg:order-1">
             
             {/* Quick Contact / WhatsApp */}
-            <div className="bg-[#FAF8F5] border border-gold/20 p-8 rounded-tr-3xl rounded-bl-3xl">
+            <div className="bg-[#FAF8F5] border border-gold/20 p-8 rounded-[2px]">
               <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center mb-6">
                 <MessageCircle className="w-5 h-5 text-gold" />
               </div>
@@ -135,7 +135,7 @@ export default function Contact() {
 
           {/* Contact Form */}
           <div className="lg:col-span-8 order-2 lg:order-2">
-            <div className="bg-[#FAF8F5] border border-gold/10 p-6 sm:p-10 shadow-sm">
+            <div className="bg-[#FAF8F5] border border-gold/10 p-6 sm:p-10 rounded-[2px]">
               <h2 className="text-xl font-bold text-[#2A1A17] mb-8 font-alexandria">أرسل لنا رسالة</h2>
 
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -147,36 +147,22 @@ export default function Contact() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="محمد بن عبدالعزيز"
-                    className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm text-[#2A1A17] placeholder:text-taupe/50 focus:bg-[#FFFDF8] focus:ring-1 focus:ring-gold/30 focus:border-gold/50 outline-none transition-all duration-300 rounded-xl shadow-sm"
+                    className="w-full px-5 py-3.5 bg-[#FFFDF8] border border-gold/20 text-sm text-[#2A1A17] placeholder:text-taupe/50 focus:bg-[#FFFDF8] focus:border-gold/50 outline-none transition-all duration-300 rounded-[2px]"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-xs font-bold text-[#2A1A17] mb-2">البريد الإلكتروني</label>
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="name@example.com"
-                      className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm text-[#2A1A17] placeholder:text-taupe/50 focus:bg-[#FFFDF8] focus:ring-1 focus:ring-gold/30 focus:border-gold/50 outline-none transition-all duration-300 rounded-xl shadow-sm text-left"
-                      dir="ltr"
-                    />
-                  </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-[#2A1A17] mb-2">رقم الهاتف</label>
-                    <input
-                      type="tel"
-                      required
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="0501234567"
-                      className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm text-[#2A1A17] placeholder:text-taupe/50 focus:bg-[#FFFDF8] focus:ring-1 focus:ring-gold/30 focus:border-gold/50 outline-none transition-all duration-300 rounded-xl shadow-sm text-left"
-                      dir="ltr"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-xs font-bold text-[#2A1A17] mb-2">رقم الهاتف</label>
+                  <input
+                    type="tel"
+                    required
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="0501234567"
+                    className="w-full px-5 py-3.5 bg-[#FFFDF8] border border-gold/20 text-sm text-[#2A1A17] placeholder:text-taupe/50 focus:bg-[#FFFDF8] focus:border-gold/50 outline-none transition-all duration-300 rounded-[2px]"
+                    dir="ltr"
+                  />
                 </div>
 
                 <div>
@@ -187,7 +173,7 @@ export default function Contact() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="اكتب رسالتك أو استفسارك هنا..."
-                    className="w-full px-5 py-3.5 bg-[#FAF8F5] border border-[#2A1A17]/10 text-sm text-[#2A1A17] placeholder:text-taupe/50 focus:bg-[#FFFDF8] focus:ring-1 focus:ring-gold/30 focus:border-gold/50 outline-none transition-all duration-300 rounded-xl shadow-sm resize-y min-h-[120px]"
+                    className="w-full px-5 py-3.5 bg-[#FFFDF8] border border-gold/20 text-sm text-[#2A1A17] placeholder:text-taupe/50 focus:bg-[#FFFDF8] focus:border-gold/50 outline-none transition-all duration-300 rounded-[2px] resize-y min-h-[120px]"
                   />
                 </div>
 

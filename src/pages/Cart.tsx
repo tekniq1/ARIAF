@@ -227,32 +227,7 @@ export default function Cart() {
                 ملخص الطلب
               </h3>
 
-              {/* Coupon */}
-              <form onSubmit={handleApplyCoupon} className="mb-8">
-                <label className="block text-xs font-bold text-[#2A1A17] mb-2">رمز القسيمة الشرائية</label>
-                <div className="flex">
-                  <input
-                    type="text"
-                    value={couponInput}
-                    onChange={(e) => setCouponInput(e.target.value)}
-                    placeholder="أدخل الرمز هنا"
-                    className="w-full px-4 py-2.5 bg-[#FFFDF8] border border-gold/30 text-sm focus:border-gold focus:outline-none rounded-none uppercase tracking-wider"
-                  />
-                  <button
-                    type="submit"
-                    disabled={checkingCoupon}
-                    className="px-6 py-2.5 bg-[#2A1A17] text-cream font-bold text-xs hover:bg-gold transition-colors rounded-none whitespace-nowrap"
-                  >
-                    {checkingCoupon ? "..." : "تطبيق"}
-                  </button>
-                </div>
-                {appliedCoupon && (
-                  <p className="text-[11px] text-emerald-700 font-bold flex items-center gap-1 mt-2">
-                    <Tag className="w-3 h-3" />
-                    تم تطبيق الخصم ({appliedCoupon.code})
-                  </p>
-                )}
-              </form>
+              {/* Coupon Form Removed for Luxury Restraint */}
 
               {/* Breakdown */}
               <div className="space-y-4 text-sm font-light text-taupe">

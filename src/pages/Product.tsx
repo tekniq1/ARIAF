@@ -37,6 +37,7 @@ export default function ProductPage() {
   const [newComment, setNewComment] = useState("");
   const [reviewerName, setReviewerName] = useState("");
   const [submittingReview, setSubmittingReview] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
 
   const { wishlist, toggleWishlist, addToCart, formatPrice, settings, showToast, user } = useStore();
 
@@ -192,44 +193,45 @@ export default function ProductPage() {
   };
 
   return (
-    <div className="min-h-screen py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen pb-32 sm:pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-12">
       {/* Breadcrumbs */}
-      <div className="text-xs text-darkText/60 mb-6 flex items-center gap-2">
-        <Link to="/" className="hover:text-gold">الرئيسية</Link>
+      <div className="text-[10px] text-taupe/60 mb-6 flex items-center gap-2 tracking-wider">
+        <Link to="/" className="hover:text-gold transition-colors">الرئيسية</Link>
         <span>/</span>
-        <Link to="/shop" className="hover:text-gold">المتجر</Link>
+        <Link to="/shop" className="hover:text-gold transition-colors">المتجر</Link>
         <span>/</span>
-        <span className="text-gold-dark font-bold">{product.name_ar}</span>
+        <span className="text-burgundy font-medium">{product.name_ar}</span>
       </div>
 
       {/* Main Product Showcase Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-20">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start mb-20">
         {/* Left: Gallery (6 Columns) */}
-        <div className="lg:col-span-6 space-y-4">
-          {/* Main Visual Display with Floating 3D Physics */}
-          <div className="relative aspect-square rounded-3xl overflow-hidden bg-gradient-to-b from-beige/50 via-white to-beige/30 p-8 border border-gold/30 shadow-luxury flex items-center justify-center">
-            {/* Ambient Gold Glow Background */}
-            <div className="absolute inset-0 bg-radial from-gold/15 to-transparent pointer-events-none" />
-
-            <motion.img
+        <div className="lg:col-span-6 space-y-6">
+          {/* Main Visual Display - Edge-to-edge on mobile */}
+          <div className="relative aspect-[3/4] sm:aspect-square bg-cream-pure sm:rounded-[4px] overflow-hidden flex items-center justify-center -mx-4 sm:mx-0">
+            <motion.div
               key={activeImage}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4 }}
-              src={activeImage}
-              alt={product.name_ar}
-              className="max-h-full max-w-full object-contain filter drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)] select-none hover:scale-105 transition-transform duration-700"
-            />
+              initial={{ opacity: 0, scale: 1.05, filter: "blur(20px)" }}
+              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full h-full flex items-center justify-center"
+            >
+              <img
+                src={activeImage}
+                alt={product.name_ar}
+                className="max-h-full max-w-full object-contain drop-shadow-sm select-none"
+              />
+            </motion.div>
 
             {/* Badges */}
-            <div className="absolute top-4 right-4 flex flex-col gap-1.5">
+            <div className="absolute top-4 right-4 sm:right-6 flex flex-col gap-2">
               {product.is_best_seller && (
-                <span className="px-3 py-1 text-xs font-bold bg-gold text-burgundy-dark rounded-full shadow-sm">
+                <span className="px-3 py-1 text-[10px] tracking-wider bg-gold text-burgundy-dark rounded-[2px]">
                   الأكثر طلباً
                 </span>
               )}
               {product.is_new && (
-                <span className="px-3 py-1 text-xs font-bold bg-burgundy text-cream rounded-full shadow-sm">
+                <span className="px-3 py-1 text-[10px] tracking-wider bg-burgundy text-cream rounded-[2px]">
                   جديد
                 </span>
               )}
@@ -238,23 +240,23 @@ export default function ProductPage() {
             {/* Wishlist Button */}
             <button
               onClick={() => toggleWishlist(product.id)}
-              className="absolute top-4 left-4 p-3 rounded-full bg-white/80 hover:bg-white text-darkText/60 hover:text-burgundy shadow-md transition-all"
+              className="absolute top-4 left-4 sm:left-6 p-2 rounded-full transition-all duration-300 text-burgundy/40 hover:text-burgundy"
             >
-              <Heart className={`w-5 h-5 ${isWishlisted ? "fill-red-600 text-red-600" : ""}`} />
+              <Heart className={`w-5 h-5 ${isWishlisted ? "fill-current text-burgundy" : ""}`} strokeWidth={isWishlisted ? 2 : 1.5} />
             </button>
           </div>
 
           {/* Thumbnail Gallery Row */}
           {product.product_images && product.product_images.length > 1 && (
-            <div className="flex items-center gap-3 overflow-x-auto py-2">
+            <div className="flex items-center gap-3 overflow-x-auto py-2 hide-scrollbar">
               {product.product_images.map((img) => (
                 <button
                   key={img.id}
                   onClick={() => setActiveImage(img.image_url)}
-                  className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all p-1 bg-white shrink-0 ${
+                  className={`w-16 h-16 sm:w-20 sm:h-20 bg-cream-pure overflow-hidden transition-all shrink-0 ${
                     activeImage === img.image_url
-                      ? "border-gold shadow-gold"
-                      : "border-transparent opacity-70 hover:opacity-100"
+                      ? "opacity-100 ring-1 ring-gold/40"
+                      : "opacity-50 hover:opacity-100"
                   }`}
                 >
                   <img src={img.image_url} alt="زاوية العطر" className="w-full h-full object-contain" />
@@ -391,32 +393,83 @@ export default function ProductPage() {
               </div>
             </div>
 
-            {/* Actions: Add to Cart & WhatsApp Order */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            {/* Actions: Add to Cart & WhatsApp Order (Desktop) */}
+            <div className="hidden sm:flex flex-row gap-3 pt-4">
               <button
                 disabled={isOutOfStock}
-                onClick={() => !isOutOfStock && addToCart(product, selectedVariantId, quantity)}
-                className={`flex-1 py-3.5 px-6 rounded-2xl font-bold text-sm flex items-center justify-center gap-2.5 transition-all duration-300 ${
+                onClick={() => {
+                  if (!isOutOfStock) {
+                    setIsAdding(true);
+                    setTimeout(() => {
+                      addToCart(product, selectedVariantId, quantity);
+                      setIsAdding(false);
+                    }, 600);
+                  }
+                }}
+                className={`relative flex-1 py-4 px-6 rounded-[2px] font-medium text-sm flex items-center justify-center gap-2.5 transition-all duration-300 ${
                   isOutOfStock
-                    ? "bg-neutral-200 text-neutral-500 border border-neutral-300 cursor-not-allowed"
-                    : "bg-burgundy hover:bg-burgundy-light text-cream border border-gold/50 shadow-goldHover hover:shadow-gold transform active:scale-95"
+                    ? "bg-neutral-200 text-neutral-500 cursor-not-allowed"
+                    : "bg-burgundy hover:bg-burgundy-light text-cream hover:shadow-card transform active:scale-[0.98]"
                 }`}
               >
-                <ShoppingBag className="w-5 h-5 text-gold-soft" />
-                <span>{isOutOfStock ? "المنتج غير متوفر" : "أضف إلى السلة"}</span>
+                {/* Scent Dispersal Effect */}
+                {isAdding && (
+                  <motion.div
+                    initial={{ scale: 0.5, opacity: 0.8 }}
+                    animate={{ scale: 2.5, opacity: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="absolute inset-0 bg-gold/40 rounded-full blur-[8px] pointer-events-none z-0"
+                  />
+                )}
+                <span className="relative z-10">{isAdding ? "جاري الإضافة..." : (isOutOfStock ? "المنتج غير متوفر" : "أضف إلى السلة")}</span>
               </button>
 
               <button
                 disabled={isOutOfStock}
                 onClick={() => !isOutOfStock && handleWhatsAppOrder()}
-                className={`flex-1 py-3.5 px-6 rounded-2xl font-bold text-sm shadow-md flex items-center justify-center gap-2.5 transition-all duration-300 ${
+                className={`flex-1 py-4 px-6 rounded-[2px] font-medium text-sm flex items-center justify-center gap-2.5 transition-all duration-300 border ${
                   isOutOfStock
-                    ? "bg-neutral-100 text-neutral-400 border border-neutral-200 cursor-not-allowed"
-                    : "bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white transform active:scale-95"
+                    ? "border-neutral-200 text-neutral-400 cursor-not-allowed"
+                    : "border-burgundy/20 text-burgundy hover:bg-burgundy/5 transform active:scale-[0.98]"
                 }`}
               >
-                <MessageCircle className="w-5 h-5" />
                 <span>{isOutOfStock ? "طلب عند التوفر" : "اطلب عبر واتساب"}</span>
+              </button>
+            </div>
+
+            {/* Mobile Sticky Add to Cart Footer */}
+            <div className="sm:hidden fixed bottom-0 left-0 right-0 p-4 bg-cream/90 backdrop-blur-md border-t border-gold/20 z-50 flex items-center gap-3">
+              <div className="flex flex-col flex-1">
+                <span className="text-xs text-taupe truncate font-serif">{product.name_en}</span>
+                <span className="text-sm font-medium text-burgundy">{formatPrice(effectivePrice * quantity)}</span>
+              </div>
+              <button
+                disabled={isOutOfStock}
+                onClick={() => {
+                  if (!isOutOfStock) {
+                    setIsAdding(true);
+                    setTimeout(() => {
+                      addToCart(product, selectedVariantId, quantity);
+                      setIsAdding(false);
+                    }, 600);
+                  }
+                }}
+                className={`relative flex-[2] py-3.5 px-4 rounded-[2px] font-medium text-sm flex items-center justify-center gap-2 transition-all ${
+                  isOutOfStock
+                    ? "bg-neutral-200 text-neutral-500"
+                    : "bg-burgundy text-cream active:scale-95"
+                }`}
+              >
+                {/* Scent Dispersal Effect */}
+                {isAdding && (
+                  <motion.div
+                    initial={{ scale: 0.5, opacity: 0.8 }}
+                    animate={{ scale: 2.5, opacity: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="absolute inset-0 bg-gold/40 rounded-[4px] blur-[8px] pointer-events-none z-0"
+                  />
+                )}
+                <span className="relative z-10">{isAdding ? "جاري الإضافة..." : (isOutOfStock ? "غير متوفر" : "أضف للسلة")}</span>
               </button>
             </div>
           </div>
