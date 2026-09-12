@@ -2,8 +2,15 @@ import React from "react";
 import { Sparkles, Award, ShieldCheck, Heart, Leaf, Compass } from "lucide-react";
 import { Link } from "react-router-dom";
 import Logo3D from "../components/Logo3D";
+import { useSEO } from "../lib/useSEO";
 
 export default function AboutUs() {
+  useSEO({
+    title: "من نحن",
+    description: "تعرف على قصة أرياف للعطور ومبادئها وقيمها.",
+    url: window.location.href,
+  });
+
   return (
     <div className="min-h-screen bg-[#FFFDF8] font-cairo">
       {/* Editorial Hero */}

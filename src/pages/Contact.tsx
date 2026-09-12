@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { MessageCircle, Phone, Mail, MapPin, Send, Sparkles, ArrowLeft } from "lucide-react";
 import { useStore } from "../lib/store";
+import { useSEO } from "../lib/useSEO";
 
 export default function Contact() {
+  useSEO({
+    title: "تواصل معنا",
+    description: "تواصل مع دار أرياف للعطور لأي استفسار أو طلبات خاصة.",
+    url: window.location.href,
+  });
+
   const { settings, showToast } = useStore();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

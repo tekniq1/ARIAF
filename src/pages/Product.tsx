@@ -19,6 +19,7 @@ import { supabase } from "../lib/supabase";
 import type { Product, Review, ProductVariant } from "../lib/types";
 import { useStore } from "../lib/store";
 import ProductCard from "../components/ProductCard";
+import { useSEO } from "../lib/useSEO";
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -38,6 +39,13 @@ export default function ProductPage() {
   const [submittingReview, setSubmittingReview] = useState(false);
 
   const { wishlist, toggleWishlist, addToCart, formatPrice, settings, showToast, user } = useStore();
+
+  useSEO({
+    title: product ? product.name_ar : "جاري التحميل...",
+    description: product ? (product.short_description || product.description) : "تسوق عطور أرياف",
+    image: activeImage,
+    url: window.location.href,
+  });
 
   useEffect(() => {
     async function loadProduct() {

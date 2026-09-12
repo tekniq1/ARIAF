@@ -5,8 +5,15 @@ import { supabase } from "../lib/supabase";
 import type { Product, Category } from "../lib/types";
 import ProductCard from "../components/ProductCard";
 import ProductSkeleton from "../components/ProductSkeleton";
+import { useSEO } from "../lib/useSEO";
 
 export default function Shop() {
+  useSEO({
+    title: "المتجر",
+    description: "تسوق أفضل العطور الطبيعية والشرقية من أرياف.",
+    url: window.location.href,
+  });
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);

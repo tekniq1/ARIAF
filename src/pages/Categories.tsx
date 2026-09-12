@@ -4,6 +4,7 @@ import { Sparkles, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "../lib/supabase";
 import type { Category } from "../lib/types";
+import { useSEO } from "../lib/useSEO";
 
 // Helper for Editorial Mosaic Grid on Desktop
 const getMosaicClasses = (index: number) => {
@@ -20,6 +21,12 @@ const getMosaicClasses = (index: number) => {
 };
 
 export default function Categories() {
+  useSEO({
+    title: "التصنيفات الملكية",
+    description: "استكشف المجموعات العطرية المتنوعة من أرياف.",
+    url: window.location.href,
+  });
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 

@@ -18,8 +18,15 @@ import ProductCard from "../components/ProductCard";
 import ProductSkeleton from "../components/ProductSkeleton";
 import Logo3D from "../components/Logo3D";
 import { Star } from "lucide-react";
+import { useSEO } from "../lib/useSEO";
 
 export default function Home() {
+  useSEO({
+    title: "الرئيسية",
+    description: "أرياف ARAYAF - تجربة استثنائية من العطور الشرقية والطبيعية الفاخرة.",
+    url: window.location.href,
+  });
+
   const { settings } = useStore();
   const [categories, setCategories] = useState<Category[]>([]);
   const [bestSellers, setBestSellers] = useState<Product[]>([]);

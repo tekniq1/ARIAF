@@ -15,8 +15,15 @@ import {
 } from "lucide-react";
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
+import { useSEO } from "../lib/useSEO";
 
 export default function Checkout() {
+  useSEO({
+    title: "إتمام الطلب",
+    description: "إتمام الطلب بأمان من متجر أرياف.",
+    url: window.location.href,
+  });
+
   const { cart, clearCart, cartSubtotal, formatPrice, settings, user, profile, showToast } = useStore();
   const navigate = useNavigate();
   const location = useLocation();

@@ -4,12 +4,20 @@ import { ArrowLeft, Sparkles } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import type { Category, Product } from "../lib/types";
 import ProductCard from "../components/ProductCard";
+import { useSEO } from "../lib/useSEO";
 
 export default function CategoryPage() {
   const { slug } = useParams<{ slug: string }>();
   const [category, setCategory] = useState<Category | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useSEO({
+    title: category ? category.name_ar : "التصنيفات",
+    description: category ? category.description : "تصفح تصنيفات عطور أرياف.",
+    image: category ? category.image_url : undefined,
+    url: window.location.href,
+  });
 
   useEffect(() => {
     async function loadCategory() {

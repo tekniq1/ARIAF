@@ -3,8 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { Trash2, Plus, Minus, ArrowLeft, ShoppingBag, Tag, Sparkles } from "lucide-react";
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
+import { useSEO } from "../lib/useSEO";
 
 export default function Cart() {
+  useSEO({
+    title: "سلة التسوق",
+    description: "راجع المنتجات في سلة التسوق الخاصة بك.",
+    url: window.location.href,
+  });
+
   const { cart, removeFromCart, updateQty, clearCart, cartSubtotal, formatPrice, settings, showToast } =
     useStore();
   const navigate = useNavigate();
